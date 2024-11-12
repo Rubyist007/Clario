@@ -1,25 +1,9 @@
-# README
+# Clario test assignment
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Setup
 
-Things you may want to cover:
+Run `rails db:setup` to setup DB and populate in with 10 subscriptions
 
-* Ruby version
+## Database
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-# Clario
+The database has a single table `subscriptions` that has `id`, `status`, `created_at`, and `updated_at` that's minimal setup required for a test assignment
