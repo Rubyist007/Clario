@@ -1,3 +1,3 @@
 class Subscription < ApplicationRecord
-  enum status: %i[inactive active]
+  enum :status, %i[inactive active]
 end
