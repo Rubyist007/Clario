@@ -79,7 +79,12 @@ class RebillOperation
     def finalize_failure
       @status = INSUFFICIENT_FUNDS
 
+      subscription.inactive!
       log_rebill_results("Rebill for subscription: #{subscription_id} failed")
+    end
+
+    def subscription
+      @subscription ||= Subscription.find(subscription_id)
     end
 
     def log_rebill_results(message)
