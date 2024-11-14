@@ -1,4 +1,6 @@
 class RebillOperation
+  class InvalidParams < StandardError; end
+
   ATTEMPTS_MULTIPLIER = [1.0, 0.75, 0.5, 0.25].freeze
   STATUSES = [
     PENDING = :pending,
@@ -27,13 +29,23 @@ class RebillOperation
   end
 
   def call
+    validate_params
+
     try_to_rebill
     schedule_next_rebill if partial_rebill?
 
-    status
+    self
   end
 
   private
+
+    def validate_params
+      raise InvalidParams unless params_valid?
+    end
+
+    def params_valid?
+      RebillValidator.valid?(amount: amount, subscription_id: subscription_id)
+    end
 
     def schedule_next_rebill
       PostponedPartialRebillJob.perform_in(1.week, remaining_to_charge, subscription_id)

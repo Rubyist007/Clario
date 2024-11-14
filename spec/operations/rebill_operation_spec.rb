@@ -5,6 +5,10 @@ RSpec.describe RebillOperation do
   let(:subscription_id) { 123 }
   let(:rebill_operation) { described_class.new(amount: amount, subscription_id: subscription_id) }
 
+  before do
+    allow(Subscription).to receive(:exists?).with(subscription_id).and_return(true)
+  end
+
   describe '.call' do
     it 'creates a new instance and calls the #call method' do
       expect_any_instance_of(described_class).to receive(:call)
@@ -120,6 +124,14 @@ RSpec.describe RebillOperation do
       it 'sets the status to :insufficient_funds' do
         rebill_operation.send(:finalize_failure)
         expect(rebill_operation.status).to eq(:insufficient_funds)
+      end
+    end
+
+    describe "#validate_params" do
+      it "raises an InvalidParams error if parameters are invalid" do
+        operation = described_class.new(amount: -10, subscription_id: "invalid_id")
+
+        expect { operation.send(:validate_params) }.to raise_error(RebillOperation::InvalidParams)
       end
     end
   end
