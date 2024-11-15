@@ -2,7 +2,7 @@ class RebillController < ApplicationController
   rescue_from RebillOperation::InvalidParams, with: :failed_responce
 
   def create
-    result = RebillOperation.call(**rebill_params.to_h)
+    result = RebillOperation.call(amount: rebill_params[:amount], subscription_id: rebill_params[:subscription_id])
 
     result.insufficient_funds? ? insufficient_funds_responce : success_responce
   end
